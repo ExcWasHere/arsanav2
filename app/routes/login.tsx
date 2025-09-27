@@ -3,12 +3,12 @@ import { Eye, EyeOff, Fingerprint, Smartphone, Lock } from "lucide-react";
 import { useNavigate } from "react-router";
 
 const ArsanaLogin = () => {
-  const navigate = useNavigate(); // <-- buat redirect
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
+    email: "arsana12@gmail.com",
+    password: "12345678",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -18,7 +18,6 @@ const ArsanaLogin = () => {
     });
   };
 
-  // fungsi untuk simpan dummy user ke localStorage + redirect
   interface User {
     id: string;
     name: string;
@@ -93,7 +92,7 @@ const ArsanaLogin = () => {
         <div className="text-center mb-8">
           <div className="flex flex-col items-center space-y-1">
             <img
-              src="/Arsana.jpg"
+              src="/favicon.ico"
               alt="Arsana Logo"
               className="w-64 h-64 rounded-full object-cover shadow-xl"
             />
