@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Fingerprint, Smartphone, Lock } from "lucide-react";
+import { Eye, EyeOff, Fingerprint, Smartphone, Lock, X } from "lucide-react";
 import { useNavigate } from "react-router";
 
 const ArsanaLogin = () => {
-  const navigate = useNavigate();
-
   const [showPassword, setShowPassword] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const navigate = useNavigate();
+  const [comingSoonFeature, setComingSoonFeature] = useState("");
   const [loginData, setLoginData] = useState({
     email: "arsana12@gmail.com",
     password: "12345678",
@@ -49,44 +50,18 @@ const ArsanaLogin = () => {
     saveAndRedirect(dummyUser);
   };
 
-  interface BiometricLoginMethod {
-    method: "Face ID" | "Fingerprint" | "PIN";
-  }
-
-  const handleBiometricLogin = (
-    method: BiometricLoginMethod["method"]
-  ): void => {
-    const dummyUser = {
-      id: `biometric_${method.toLowerCase()}`,
-      name: `${method} Demo User`,
-      email: `${method.toLowerCase()}@demo.arsana`,
-      role: "user",
-      token: `demo-token-${method}`,
-    };
-
-    saveAndRedirect(dummyUser);
+  const showComingSoonModal = (feature: string) => {
+    setComingSoonFeature(feature);
+    setShowComingSoon(true);
   };
 
-  interface SocialLoginProvider {
-    provider: "Google" | "Facebook";
-  }
-
-  const handleSocialLogin = (
-    provider: SocialLoginProvider["provider"]
-  ): void => {
-    const dummyUser = {
-      id: `social_${provider.toLowerCase()}`,
-      name: `${provider} Demo User`,
-      email: `${provider.toLowerCase()}@demo.arsana`,
-      role: "user",
-      token: `social-token-${provider}`,
-    };
-
-    saveAndRedirect(dummyUser);
+  const closeComingSoonModal = () => {
+    setShowComingSoon(false);
+    setComingSoonFeature("");
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center p-4 relative">
       <div className="w-full max-w-md">
         {/* Logo Section */}
         <div className="text-center mb-8">
@@ -100,7 +75,7 @@ const ArsanaLogin = () => {
         </div>
 
         {/* Login Form Card */}
-        <div className="bg-white rounded-3xl shadow-2xl p-8">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 relative z-10">
           <div className="text-center mb-6">
             <p className="text-gray-600 text-sm mb-4">
               Sudah punya akun? Yuk, langsung masuk!
@@ -142,10 +117,10 @@ const ArsanaLogin = () => {
               </button>
             </div>
 
-            {/* Login Button */}
+            {/* Login Button - Main working button */}
             <button
               onClick={handleLogin}
-              className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-semibold py-3 rounded-xl hover:from-cyan-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-semibold py-3 rounded-xl hover:from-cyan-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 active:scale-95"
             >
               MASUK
             </button>
@@ -158,34 +133,37 @@ const ArsanaLogin = () => {
             </div>
 
             <div className="flex justify-center space-x-6">
+              {/* Face ID Button */}
               <button
-                onClick={() => handleBiometricLogin("Face ID")}
-                className="flex flex-col items-center space-y-2 p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                onClick={() => showComingSoonModal("Face ID")}
+                className="flex flex-col items-center space-y-2 p-3 rounded-xl hover:bg-gradient-to-br hover:from-purple-50 hover:to-pink-50 transition-all duration-300 transform hover:scale-110 hover:rotate-3 group"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
-                  <Smartphone className="text-white" size={24} />
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center group-hover:shadow-lg group-hover:shadow-purple-300 transition-all duration-300">
+                  <Smartphone className="text-white group-hover:animate-pulse" size={24} />
                 </div>
-                <span className="text-xs text-gray-600">Face ID</span>
+                <span className="text-xs text-gray-600 group-hover:text-purple-600 font-medium">Face ID</span>
               </button>
 
+              {/* Fingerprint Button */}
               <button
-                onClick={() => handleBiometricLogin("Fingerprint")}
-                className="flex flex-col items-center space-y-2 p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                onClick={() => showComingSoonModal("Fingerprint")}
+                className="flex flex-col items-center space-y-2 p-3 rounded-xl hover:bg-gradient-to-br hover:from-green-50 hover:to-blue-50 transition-all duration-300 transform hover:scale-110 hover:-rotate-3 group"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-400 rounded-full flex items-center justify-center">
-                  <Fingerprint className="text-white" size={24} />
+                <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-400 rounded-full flex items-center justify-center group-hover:shadow-lg group-hover:shadow-green-300 transition-all duration-300">
+                  <Fingerprint className="text-white group-hover:animate-spin" size={24} />
                 </div>
-                <span className="text-xs text-gray-600">Fingerprint</span>
+                <span className="text-xs text-gray-600 group-hover:text-green-600 font-medium">Fingerprint</span>
               </button>
 
+              {/* PIN Button */}
               <button
-                onClick={() => handleBiometricLogin("PIN")}
-                className="flex flex-col items-center space-y-2 p-3 rounded-xl hover:bg-gray-50 transition-colors"
+                onClick={() => showComingSoonModal("PIN")}
+                className="flex flex-col items-center space-y-2 p-3 rounded-xl hover:bg-gradient-to-br hover:from-orange-50 hover:to-red-50 transition-all duration-300 transform hover:scale-110 hover:rotate-6 group"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center">
-                  <Lock className="text-white" size={24} />
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center group-hover:shadow-lg group-hover:shadow-orange-300 transition-all duration-300">
+                  <Lock className="text-white group-hover:animate-bounce" size={24} />
                 </div>
-                <span className="text-xs text-gray-600">PIN</span>
+                <span className="text-xs text-gray-600 group-hover:text-orange-600 font-medium">PIN</span>
               </button>
             </div>
           </div>
@@ -196,17 +174,19 @@ const ArsanaLogin = () => {
               atau masuk dengan
             </div>
             <div className="flex space-x-3">
+              {/* Google Button */}
               <button
-                onClick={() => handleSocialLogin("Google")}
-                className="flex-1 flex items-center justify-center space-x-2 bg-gray-300 text-white font-semibold py-3 rounded-xl hover:bg-gray-600 transition-colors"
+                onClick={() => showComingSoonModal("Google Login")}
+                className="flex-1 flex items-center justify-center space-x-2 bg-gray-500 text-white font-semibold py-3 rounded-xl hover:bg-gray-700 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-gray-400 group"
               >
                 <img src="/logoGoogle.png" alt="Google" className="w-7 h-7" />
                 <span>Google</span>
               </button>
 
+              {/* Facebook Button */}
               <button
-                onClick={() => handleSocialLogin("Facebook")}
-                className="flex-1 flex items-center justify-center space-x-2 bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-900 transition-colors"
+                onClick={() => showComingSoonModal("Facebook Login")}
+                className="flex-1 flex items-center justify-center space-x-2 bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-900 hover:shadow-xl hover:shadow-blue-400 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 group"
               >
                 <img src="/logoFacebook.png" alt="Facebook" className="w-7 h-7" />
                 <span>Facebook</span>
@@ -218,25 +198,63 @@ const ArsanaLogin = () => {
           <div className="mt-6 text-center">
             <p className="text-xs text-gray-500">
               Dengan masuk ke Arsana, kamu menyetujui{" "}
-              <span className="text-cyan-500 hover:underline cursor-pointer">
+              <button 
+                onClick={() => showComingSoonModal("Ketentuan")}
+                className="text-cyan-500 hover:underline hover:text-cyan-600 transition-colors"
+              >
                 Ketentuan
-              </span>{" "}
+              </button>{" "}
               dan{" "}
-              <span className="text-cyan-500 hover:underline cursor-pointer">
+              <button 
+                onClick={() => showComingSoonModal("Kebijakan Privasi")}
+                className="text-cyan-500 hover:underline hover:text-cyan-600 transition-colors"
+              >
                 Kebijakan Privasi
-              </span>{" "}
+              </button>{" "}
               kami.
             </p>
           </div>
 
           {/* Register Link */}
           <div className="mt-4 text-center">
-            <button className="text-cyan-500 hover:underline text-sm font-medium">
+            <button 
+              onClick={() => showComingSoonModal("Registrasi")}
+              className="text-cyan-500 hover:underline text-sm font-medium hover:text-cyan-600 hover:bg-cyan-50 px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105"
+            >
               Belum punya akun? DAFTAR
             </button>
           </div>
         </div>
       </div>
+
+      {/* Coming Soon Modal */}
+      {showComingSoon && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-sm w-full transform animate-pulse">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🚀</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Coming Soon!</h3>
+              <p className="text-gray-600 mb-6">
+                Fitur <span className="font-semibold text-cyan-600">{comingSoonFeature}</span> sedang dalam pengembangan dan akan segera hadir!
+              </p>
+              <button
+                onClick={closeComingSoonModal}
+                className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-white font-semibold py-3 rounded-xl hover:from-cyan-500 hover:to-blue-600 transition-all duration-300 transform hover:scale-105"
+              >
+                Oke, Ditunggu!
+              </button>
+            </div>
+            <button
+              onClick={closeComingSoonModal}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

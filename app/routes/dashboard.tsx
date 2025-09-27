@@ -12,20 +12,26 @@ import {
   Star,
   ChevronRight,
   Timer,
-  BookOpenCheck
+  BookOpenCheck,
+  LogOut,
+  Bell,
+  Settings
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const ArsanaDashboard = () => {
-  const [activeTab, setActiveTab] = useState("Rumah");
+  const [activeTab, setActiveTab] = useState("Beranda");
   const navigate = useNavigate();
   
   const userData = {
-    name: "Nizam",
+    name: "Nizam Abdurrahim",
     exp: 120,
-    grade: "NIZAM",
-    curriculum: "KELAS 3",
-    profileImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face"
+    grade: "Kelas 3",
+    curriculum: "Merdeka Belajar",
+    profileImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop&crop=face",
+    school: "SD Negeri 01 Jakarta",
+    totalBadges: 12,
+    completedLessons: 45
   };
 
   const subjects = [
@@ -72,27 +78,34 @@ const ArsanaDashboard = () => {
   const navigateToCourse = (subjectName: string) => {
     if (subjectName === "Matematika") {
       navigate("/course-mtk");
+      console.log("Navigate to course:", subjectName);
     }
   };
 
-  type TabButtonProps = {
+  const handleLogout = () => {
+    if (confirm("Apakah kamu yakin mau pergi:( ?")) {
+      window.location.href = "/";
+    }
+  };
+
+  type NavButtonProps = {
     name: string;
     icon: React.ReactNode;
     isActive: boolean;
     onClick: (name: string) => void;
   };
 
-  const TabButton: React.FC<TabButtonProps> = ({ name, icon, isActive, onClick }) => (
+  const NavButton: React.FC<NavButtonProps> = ({ name, icon, isActive, onClick }) => (
     <button
       onClick={() => onClick(name)}
-      className={`flex flex-col items-center py-2 px-2 rounded-xl transition-all duration-300 ${
+      className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 ${
         isActive 
           ? "text-blue-600 bg-blue-50 shadow-sm" 
-          : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+          : "text-gray-600 hover:text-gray-800 hover:bg-gray-50"
       }`}
     >
       {icon}
-      <span className="text-xs mt-1 font-medium">{name}</span>
+      <span className="text-sm font-medium">{name}</span>
     </button>
   );
 
@@ -189,42 +202,69 @@ const ArsanaDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      {/* Header */}
-      <div className="bg-white/80 backdrop-blur-lg shadow-lg border-b border-white/20">
-        <div className="p-6">
+      {/* Navbar Header */}
+      <div className="bg-white/90 backdrop-blur-xl shadow-lg border-b border-white/20 sticky top-0 z-50">
+        <div className="px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <img
-                  src={userData.profileImage}
-                  alt="Profile"
-                  className="w-16 h-16 rounded-2xl object-cover shadow-lg ring-4 ring-white"
-                />
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 rounded-full border-4 border-white flex items-center justify-center">
-                  <div className="w-2 h-2 bg-green-600 rounded-full"></div>
-                </div>
-              </div>
-              
-              <div className="space-y-1">
-                <p className="text-sm text-gray-500 font-medium">{userData.curriculum}</p>
-                <p className="font-bold text-gray-800 text-lg">{userData.grade}</p>
-              </div>
-            </div>
-            
+            {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-2 bg-gradient-to-r from-amber-400 to-orange-400 text-white px-4 py-2 rounded-2xl shadow-lg">
-                <Star size={18} className="text-white" />
-                <span className="font-bold">{userData.exp}</span>
-                <span className="text-sm opacity-90">EXP</span>
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                <img src="favicon.ico" alt="logoArsana" />
               </div>
+              <span className="text-xl font-bold text-cyan-500">Arsana</span>
+            </div>
+
+            {/* Navigation Menu */}
+            <div className="hidden md:flex items-center space-x-2">
+              <NavButton
+                name="Beranda"
+                icon={<Home size={18} />}
+                isActive={activeTab === "Beranda"}
+                onClick={setActiveTab}
+              />
+              <NavButton
+                name="Kelas"
+                icon={<BookOpen size={18} />}
+                isActive={activeTab === "Kelas"}
+                onClick={setActiveTab}
+              />
+              <NavButton
+                name="Zona Soal"
+                icon={<Trophy size={18} />}
+                isActive={activeTab === "Zona Soal"}
+                onClick={setActiveTab}
+              />
+              <NavButton
+                name="Teman"
+                icon={<Users size={18} />}
+                isActive={activeTab === "Teman"}
+                onClick={setActiveTab}
+              />
+            </div>
+
+            {/* Right Side Actions */}
+            <div className="flex items-center space-x-3">
+              <button className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-all duration-300">
+                <Bell size={20} />
+              </button>
+              <button className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition-all duration-300">
+                <Settings size={20} />
+              </button>
+              <button 
+                onClick={handleLogout}
+                className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all duration-300"
+              >
+                <LogOut size={18} />
+                <span className="text-sm font-medium hidden sm:block">Logout</span>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="px-6 pb-32">
-        {/* Greeting Section with Background Space */}
+      <div className="px-6 pb-8">
+        {/* Profile Section */}
         <div className="py-8">
           <div className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 rounded-3xl p-8 text-white overflow-hidden shadow-2xl">
             {/* Background Pattern */}
@@ -235,18 +275,48 @@ const ArsanaDashboard = () => {
               <div className="absolute bottom-4 right-4 w-8 h-8 rounded-full bg-white"></div>
             </div>
             
-            {/* Logo Space - you can add Arsana logo here */}
-            <div className="relative z-10 mb-6">
-              <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-                <span className="text-2xl font-bold">A</span> {/* Placeholder for Arsana logo */}
+            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center space-y-6 md:space-y-0 md:space-x-8">
+              {/* Profile Image */}
+              <div className="relative">
+                <img
+                  src={userData.profileImage}
+                  alt="Profile"
+                  className="w-24 h-24 md:w-32 md:h-32 rounded-3xl object-cover shadow-2xl ring-4 ring-white/30"
+                />
+                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-400 rounded-full border-4 border-white flex items-center justify-center shadow-lg">
+                  <div className="w-3 h-3 bg-green-600 rounded-full"></div>
+                </div>
               </div>
-            </div>
-            
-            <div className="relative z-10">
-              <h1 className="text-3xl font-bold mb-2">
-                Hai, {userData.name}! 👋
-              </h1>
-              <p className="text-blue-100 text-lg">Siap belajar hari ini?</p>
+              
+              {/* Profile Info */}
+              <div className="flex-1">
+                <div className="mb-4">
+                  <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                    Hai, {userData.name}! 👋
+                  </h1>
+                  <p className="text-blue-100 text-lg mb-1">{userData.grade} • {userData.curriculum}</p>
+                  <p className="text-blue-200 text-sm">{userData.school}</p>
+                </div>
+                
+                {/* Stats */}
+                <div className="flex flex-wrap gap-4">
+                  <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-2xl">
+                    <Star className="text-yellow-300" size={18} />
+                    <span className="font-bold">{userData.exp}</span>
+                    <span className="text-sm opacity-90">EXP</span>
+                  </div>
+                  <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-2xl">
+                    <Award className="text-yellow-300" size={18} />
+                    <span className="font-bold">{userData.totalBadges}</span>
+                    <span className="text-sm opacity-90">Lencana</span>
+                  </div>
+                  <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-2xl">
+                    <BookOpenCheck className="text-green-300" size={18} />
+                    <span className="font-bold">{userData.completedLessons}</span>
+                    <span className="text-sm opacity-90">Pelajaran</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -281,7 +351,7 @@ const ArsanaDashboard = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-800">Layar Ilmu</h2>
-            <span className="text-blue-600 text-sm font-semibold">Lihat Semua</span>
+            <span className="text-blue-600 text-sm font-semibold cursor-pointer hover:text-blue-700">Lihat Semua</span>
           </div>
           <div className="space-y-6">
             {subjects.map((subject, index) => (
@@ -294,7 +364,7 @@ const ArsanaDashboard = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-800">Arena Pintar</h2>
-            <span className="text-blue-600 text-sm font-semibold">Lihat Semua</span>
+            <span className="text-blue-600 text-sm font-semibold cursor-pointer hover:text-blue-700">Lihat Semua</span>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {games.map((game, index) => (
@@ -307,7 +377,7 @@ const ArsanaDashboard = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-800">Lencana Bulanan</h2>
-            <span className="text-blue-600 text-sm font-semibold">Koleksi</span>
+            <span className="text-blue-600 text-sm font-semibold cursor-pointer hover:text-blue-700">Koleksi</span>
           </div>
           <div className="space-y-4">
             {badges.map((badge, index) => (
@@ -352,42 +422,6 @@ const ArsanaDashboard = () => {
               </button>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-white/20 px-6 py-4 shadow-2xl">
-        <div className="flex justify-around items-center max-w-md mx-auto">
-          <TabButton
-            name="Beranda"
-            icon={<Home size={24} />}
-            isActive={activeTab === "Beranda"}
-            onClick={setActiveTab}
-          />
-          <TabButton
-            name="Kelas"
-            icon={<BookOpen size={24} />}
-            isActive={activeTab === "Kelas"}
-            onClick={setActiveTab}
-          />
-          <TabButton
-            name="Zona Soal"
-            icon={<Trophy size={24} />}
-            isActive={activeTab === "Zona Soal"}
-            onClick={setActiveTab}
-          />
-          <TabButton
-            name="Teman"
-            icon={<Users size={24} />}
-            isActive={activeTab === "Teman"}
-            onClick={setActiveTab}
-          />
-          <TabButton
-            name="Saya"
-            icon={<User size={24} />}
-            isActive={activeTab === "Saya"}
-            onClick={setActiveTab}
-          />
         </div>
       </div>
     </div>
