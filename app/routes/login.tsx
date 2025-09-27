@@ -81,7 +81,7 @@ const ArsanaLogin = () => {
               Sudah punya akun? Yuk, langsung masuk!
             </p>
             <h2 className="text-xl font-semibold text-gray-800">
-              Masukkan detailmu
+              Masukkan email dan kata sandi kamu ya!
             </h2>
           </div>
 
