@@ -207,9 +207,9 @@ const ArsanaDashboard = () => {
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                <img src="favicon.ico" alt="logoArsana" />
+            <div className="flex items-center">
+              <div className="w-18 h-18 rounded-xl flex items-center justify-center">
+                <img src="Tangan.png" alt="logoArsana" />
               </div>
               <span className="text-xl font-bold text-cyan-500">Arsana</span>
             </div>
