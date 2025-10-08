@@ -23,6 +23,8 @@ const ArsanaDashboard = () => {
   const [activeTab, setActiveTab] = useState("Beranda");
   const navigate = useNavigate();
   const [showKifliVideo, setShowKifliVideo] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [comingSoonFeature, setComingSoonFeature] = useState("");
 
   const userData = {
     name: "Nizam Abdurrahim",
@@ -107,13 +109,33 @@ const ArsanaDashboard = () => {
 
   const navigateToCourse = (subjectName: string) => {
     if (subjectName === "Matematika") {
-    setShowKifliVideo(true);
-    return;
-  }
-    if (subjectName === "Matematika") {
-      navigate("/course-mtk");
-      console.log("Navigate to course:", subjectName);
+      // Tidak langsung navigate, akan di-handle oleh handleTopicClick
+      return;
     }
+  };
+
+  const handleTopicClick = (topicName: string) => {
+    if (topicName === "Operasi Hitung") {
+      setShowKifliVideo(true);
+    } else if (topicName === "Bilangan") {
+      setComingSoonFeature("Materi Bilangan");
+      setShowComingSoon(true);
+    }
+  };
+
+  const handleVideoEnd = () => {
+    setShowKifliVideo(false);
+    navigate("/course-mtk");
+  };
+
+  const handleSkipVideo = () => {
+    setShowKifliVideo(false);
+    navigate("/course-mtk");
+  };
+
+  const closeComingSoonModal = () => {
+    setShowComingSoon(false);
+    setComingSoonFeature("");
   };
 
   const handleLogout = () => {
@@ -163,8 +185,9 @@ const ArsanaDashboard = () => {
 
   const SubjectCard: React.FC<{ subject: Subject }> = ({ subject }) => (
     <div
-      className={`relative bg-gradient-to-br ${subject.color} rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 overflow-hidden`}
-      onClick={() => navigateToCourse(subject.name)}
+      className={`relative bg-gradient-to-br ${subject.color} rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all duration-300 ${
+        subject.isComingSoon ? "cursor-not-allowed opacity-90" : ""
+      } overflow-hidden`}
     >
       <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
         <div className="w-full h-full rounded-full border-8 border-white transform translate-x-8 -translate-y-8"></div>
@@ -190,9 +213,7 @@ const ArsanaDashboard = () => {
             <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
               <span className="text-xs font-medium">Coming Soon</span>
             </div>
-          ) : (
-            <ChevronRight className="text-white/60" size={20} />
-          )}
+          ) : null}
         </div>
 
         {subject.topics.length > 0 && (
@@ -200,7 +221,8 @@ const ArsanaDashboard = () => {
             {subject.topics.slice(0, 2).map((topic, index) => (
               <div
                 key={index}
-                className="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/10"
+                onClick={() => handleTopicClick(topic.name)}
+                className="bg-white/15 backdrop-blur-sm rounded-xl p-4 border border-white/10 cursor-pointer hover:bg-white/25 transition-all duration-300 transform hover:scale-105"
               >
                 <div className="flex justify-between items-start mb-2">
                   <span className="font-semibold text-sm">{topic.name}</span>
@@ -503,25 +525,59 @@ const ArsanaDashboard = () => {
             </div>
           </div>
         </div>
-        {/* KIFLI */}
+
+        {/* KIFLI Video Pop-up */}
         {showKifliVideo && (
-          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl p-4 shadow-2xl relative">
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl p-4 shadow-2xl relative w-full max-w-md">
               <video
                 src="/KIFLI.mp4"
                 autoPlay
                 controls
-                className="w-[420px] h-[240px] rounded-xl object-cover"
-                onEnded={() => {
-                  setShowKifliVideo(false);
-                  navigate("/course-mtk");
-                }}
+                className="w-full h-auto rounded-xl object-contain"
+                style={{ maxHeight: '70vh' }}
+                onEnded={handleVideoEnd}
               />
               <button
-                onClick={() => setShowKifliVideo(false)}
+                onClick={handleSkipVideo}
+                className="mt-4 w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105"
+              >
+                OK
+              </button>
+              <button
+                onClick={handleSkipVideo}
                 className="absolute top-2 right-2 bg-black/60 text-white rounded-full p-1 hover:bg-black/80"
               >
                 <X size={16} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Coming Soon Modal */}
+        {showComingSoon && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-sm w-full relative">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🚀</span>
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">Coming Soon!</h3>
+                <p className="text-gray-600 mb-6">
+                  Fitur <span className="font-semibold text-blue-600">{comingSoonFeature}</span> sedang dalam pengembangan dan akan segera hadir!
+                </p>
+                <button
+                  onClick={closeComingSoonModal}
+                  className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105"
+                >
+                  Oke, Ditunggu!
+                </button>
+              </div>
+              <button
+                onClick={closeComingSoonModal}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={20} />
               </button>
             </div>
           </div>

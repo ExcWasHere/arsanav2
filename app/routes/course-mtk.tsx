@@ -180,10 +180,9 @@ const ArsanaCoursePage = () => {
                   controls
                   autoPlay
                   loop
-                  className="w-full h-full object-cover rounded-xl"
+                  className="w-full h-full object-contain rounded-xl"
                 />
               </div>
-
               {/* Video Info */}
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
