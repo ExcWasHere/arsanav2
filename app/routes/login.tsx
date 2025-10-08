@@ -130,11 +130,11 @@ const ArsanaLogin = () => {
             MASUK
           </button>
 
-          {/* 🎬 DIRA Video kecil */}
+          {/* DIRA */}
           {showVideo && (
             <div className="relative">
               <video
-                src="/public/dira.mp4"
+                src="/public/DIRA.mp4"
                 autoPlay
                 loop
                 muted
