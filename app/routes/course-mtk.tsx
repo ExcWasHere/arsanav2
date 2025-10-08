@@ -176,7 +176,7 @@ const ArsanaCoursePage = () => {
             <div className="bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden border border-white/30">
               <div className="aspect-video bg-gray-900">
                 <video
-                  src="/public/NIZAM.mp4"
+                  src="/NIZAM.mp4"
                   controls
                   autoPlay
                   loop

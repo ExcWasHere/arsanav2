@@ -508,7 +508,7 @@ const ArsanaDashboard = () => {
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
             <div className="bg-white rounded-2xl p-4 shadow-2xl relative">
               <video
-                src="/public/KIFLI.mp4"
+                src="/KIFLI.mp4"
                 autoPlay
                 controls
                 className="w-[420px] h-[240px] rounded-xl object-cover"

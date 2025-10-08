@@ -134,7 +134,7 @@ const ArsanaLogin = () => {
           {showVideo && (
             <div className="relative">
               <video
-                src="/public/DIRA.mp4"
+                src="/DIRA.mp4"
                 autoPlay
                 loop
                 muted
